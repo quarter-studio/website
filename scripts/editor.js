@@ -1,15 +1,18 @@
 import { load } from './support.js'
 
-load('https://cdn.jsdelivr.net/npm/vue', (event) => {
-  Vue.component('slider', slider)
-  var app = new Vue(editor)
-  app.animation = animation
-  app.$mount(
-    document.body.appendChild(
-      document.createElement('div')
+load(
+  'https://cdn.jsdelivr.net/npm/vue',
+  (event) => {
+    Vue.component('slider', slider)
+    var app = new Vue(editor)
+    app.animation = animation
+    app.$mount(
+      document.body.appendChild(
+        document.createElement('div')
+      )
     )
-  )
-})
+  }
+)
 
 var editor = {
   data: {
@@ -23,6 +26,10 @@ var editor = {
     },
     button: {
       marginTop: '10px'
+    },
+    input: {
+      width: '4ch',
+      textAlign: 'center'
     }
   },
 

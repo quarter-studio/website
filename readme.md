@@ -31,7 +31,7 @@ firebase serve
 
 ### Compile Assets
 ```
-npm run watch
+npm run work
 ```
 
 ## Deploying

@@ -7,10 +7,15 @@ export default (canvas, config) => {
     fs = fs.replace('#endif', `#endif\nuniform float u_${key};\n`)
   }
 
-  var textures = { ...config.textures }
+  var textures = {
+    ...config.textures
+  }
 
   for (var key in textures) {
-    var texture = textures[key] = { ...textures[key] }
+    var texture = textures[key] = {
+      ...textures[key]
+    }
+
     if (texture.mag) {
       texture.mag = context[texture.mag]
     }
@@ -21,7 +26,7 @@ export default (canvas, config) => {
   var program = twgl.createProgramInfo(context, [config.vs, fs])
 
   context.useProgram(program.program)
-  
+
   twgl.setBuffersAndAttributes(context, program, buffer)
 
   var uniforms = {

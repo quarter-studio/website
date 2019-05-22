@@ -20,7 +20,7 @@ resize()
 
 // turn off rendering if off screen
 var scroll = () => {
-  return animation.enabled = window.pageYOffset < window.innerHeight * 1.15;
+  animation.enabled = window.pageYOffset < window.innerHeight * 1.15;
 }
 
 window.addEventListener('scroll', scroll)
@@ -38,11 +38,10 @@ render(0)
 
 // load editor with tilde key
 var keydown = (event) => {
-  if (event.keyCode !== 192) return;
-
-  load('/scripts/editor.js')
-
-  window.removeEventListener('keydown', keydown)
+  if (event.keyCode === 192) {
+    load('/scripts/editor.js')
+    window.removeEventListener('keydown', keydown)
+  }
 }
 
 window.addEventListener('keydown', keydown)
