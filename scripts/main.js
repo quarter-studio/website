@@ -1,11 +1,11 @@
-import noise from './shaders/noise.js'
+import ashima from './shaders/ashima.js'
 import shader from './shader.js'
 import { load } from './support.js';
 import '../styles/main.sass'
 
 var canvas = document.querySelector('.shader')
 
-window.animation = shader(canvas, noise)
+window.animation = shader(canvas, ashima)
 
 // resize the canvas
 var resize = () => {
@@ -46,4 +46,4 @@ var keydown = (event) => {
 
 window.addEventListener('keydown', keydown)
 
-keydown({ keyCode: 192 })
+// keydown({ keyCode: 192 })
