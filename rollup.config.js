@@ -22,7 +22,7 @@ var main = {
     closure(),
     sass({
       output: 'public/styles/main.css',
-      processor: css => postcss([autoprefixer, cssnano, mqpacker])
+      processor: css => postcss([autoprefixer])
         .process(css)
         .then(result => result.css)
     })
