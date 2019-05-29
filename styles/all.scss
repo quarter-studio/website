@@ -147,22 +147,21 @@ html {
   flex: 1;
 }
 
-
-
 .navigation li {
-  display: inline-block;
+  display: inline;
 }
 
 .navigation li + li::before {
   content: '/ ';
+  margin-left: 0.1rem;
 }
 
 .header ul {
-  min-width: 10rem;
+  min-width: 8rem;
 }
 
 .footer ul {
-  min-width: 12rem;
+  min-width: 14rem;
 }
 
 .grid {
@@ -216,6 +215,7 @@ html {
 
 .capability ul {
   opacity: 0.5;
+  font-weight: 100;
   list-style: none;
   margin-top: 0.9375rem;
   line-height: 1.5625rem;
@@ -444,7 +444,7 @@ html {
   }
 
   .intro {
-    height: 101vh;
+    height: 90vh;
     font-size: 1.75rem;
     max-width: 20rem;
     margin: 0 auto;
@@ -505,6 +505,7 @@ html {
   }
 
   .contact {
+    height: 62vh;
     font-size: 1.75rem;
     max-width: 20rem;
     margin: 0 auto;
@@ -527,5 +528,26 @@ html {
   .container {
     margin-left: 2rem;
     margin-right: 2rem;
+  }
+
+  .intro {
+    font-size: 1.75rem;
+    max-width: 20rem;
+  }
+}
+
+@media (max-width: 340px) {
+  .container {
+    margin-left: 2rem;
+    margin-right: 2rem;
+  }
+
+  .intro {
+    font-size: 1.5rem;
+    max-width: 18rem;
+  }
+
+  .contact .title {
+    font-size: 1.25rem;
   }
 }

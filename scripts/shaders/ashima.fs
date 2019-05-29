@@ -99,7 +99,7 @@ float getDepth(float n){
 }
 
 void main(){
-  float t = u_time * 0.01;
+  float t = u_time * 0.00001;
   vec2 uv = gl_FragCoord.xy / u_resolution;
   vec3 col = vec3(0);
 
