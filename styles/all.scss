@@ -317,6 +317,22 @@ html {
   text-transform: uppercase;
 }
 
+.projects a {
+  position: relative;
+}
+
+.projects a:after {
+  left: 0;
+  right: 0;
+  height: 1px;
+  bottom: -2px;
+  content: '';
+  position: absolute;
+  background-size: 10px 1px;
+  background-image: linear-gradient(90deg, white 50%, transparent 50%);
+  // background-position: center; 
+}
+
 /* -------- Responsive Scale -------- */
 
 @media (min-width: 1024px) and (max-width: 1300px) {
@@ -521,6 +537,10 @@ html {
 
   .link .text {
     display: none;
+  }
+
+  .projects a:after {
+    bottom: -2px;
   }
 }
 
