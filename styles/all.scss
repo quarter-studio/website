@@ -325,12 +325,11 @@ html {
   left: 0;
   right: 0;
   height: 1px;
-  bottom: -2px;
+  bottom: 0.125rem;
   content: '';
   position: absolute;
-  background-size: 10px 1px;
+  background-size: 0.625rem 1px;
   background-image: linear-gradient(90deg, white 50%, transparent 50%);
-  // background-position: center; 
 }
 
 /* -------- Responsive Scale -------- */
@@ -540,7 +539,7 @@ html {
   }
 
   .projects a:after {
-    bottom: -2px;
+    bottom: 0.125rem;
   }
 }
 
