@@ -179,6 +179,23 @@ void main(){
 }
 `;
 
+function getWindowWidth() {
+  return window.innerWidth
+  || document.documentElement.clientWidth
+  || document.body.clientWidth;
+}
+
+function getWindowHeight() {
+  return window.innerHeight
+  || document.documentElement.clientHeight
+  || document.body.clientHeight;
+}
+
+function getScrollTop() {
+  return document.body.scrollTop
+  || document.documentElement.scrollTop;
+}
+
 // get mouse position for GL uniform
 function getRelativeMousePosition(event, target) {
   target = target || event.target;
@@ -219,7 +236,8 @@ function resize(canvas) {
 
 
 // init webgl
-const mousePos = {x: 0, y: 0};
+let disabled = false;
+// const mousePos = {x: 0, y: 0};
 const gl = document.getElementById("c").getContext("webgl");
 const programInfo = twgl.createProgramInfo(gl, [vs, fs]);
 
@@ -234,39 +252,63 @@ const textures = twgl.createTextures(gl, {
   ashima2: { src: "/images/ashima2.png" }
 });
 
+const uniforms = {
+  u_mouse: [0, 0],
+  u_texture: textures.noise,
+  u_ashima1: textures.ashima1,
+  u_ashima2: textures.ashima2
+};
+
+gl.useProgram(programInfo.program);
+twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+
 function render(time) {
-  twgl.resizeCanvasToDisplaySize(gl.canvas, 1); //use window.devicePixelRatio if you want retina, we might not though...
-  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  requestAnimationFrame(render);
 
-  const uniforms = {
-    u_time: time * 0.001,
-    u_resolution: [gl.canvas.width, gl.canvas.height],
-    u_mouse: [mousePos.x, mousePos.y],
-    u_texture: textures.noise,
-    u_ashima1: textures.ashima1,
-    u_ashima2: textures.ashima2
-  };
+  if (disabled) return;
 
-  gl.useProgram(programInfo.program);
-  twgl.setBuffersAndAttributes(gl, programInfo, bufferInfo);
+  console.log('render');
+
+  uniforms.u_time = time * 0.001;
+
   twgl.setUniforms(programInfo, uniforms);
   twgl.drawBufferInfo(gl, bufferInfo);
-
-  requestAnimationFrame(render);
 }
 
 requestAnimationFrame(render);
 
-
-// attach listener for updating mouse position uniform
-window.addEventListener('mousemove', e => {
-  const pos = getNoPaddingNoBorderCanvasRelativeMousePosition(e, gl.canvas);
+function onMouseMove(e) {
+  // const pos = getNoPaddingNoBorderCanvasRelativeMousePosition(e, gl.canvas);
 
   // pos is in pixel coordinates for the canvas.
   // so convert to WebGL clip space coordinates
-  const x = pos.x / gl.canvas.width  *  2 - 1;
-  const y = pos.y / gl.canvas.height * -2 + 1;
+  // const x = pos.x / gl.canvas.width  *  2 - 1;
+  // const y = pos.y / gl.canvas.height * -2 + 1;
 
   // mousePos.x = x;
   // mousePos.y = y;
-});
+
+  // uniforms.u_mouse = [x, y]
+};
+
+// attach listener for updating mouse position uniform
+window.addEventListener('mousemove', onMouseMove);
+
+function onWindowResize() {
+  var pixelRatio = getWindowWidth() < 700 ?  window.devicePixelRatio : 1;
+  twgl.resizeCanvasToDisplaySize(gl.canvas, pixelRatio);
+  gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
+  uniforms.u_resolution = [gl.canvas.width, gl.canvas.height];
+}
+
+window.addEventListener('resize', onWindowResize)
+
+function onWindowScroll(e) {
+  disabled = getScrollTop() > getWindowHeight() 
+}
+
+window.addEventListener('scroll', onWindowScroll)
+
+onWindowResize()
+onWindowScroll()
+onMouseMove()
