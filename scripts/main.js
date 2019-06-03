@@ -235,7 +235,7 @@ const textures = twgl.createTextures(gl, {
 });
 
 function render(time) {
-  twgl.resizeCanvasToDisplaySize(gl.canvas, 1); //use window.devicePixelRatio if you want retina, we might not though...
+  twgl.resizeCanvasToDisplaySize(gl.canvas, window.devicePixelRatio); //use window.devicePixelRatio if you want retina, we might not though...
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
 
   const uniforms = {
