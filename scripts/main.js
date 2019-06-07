@@ -267,8 +267,6 @@ function render(time) {
 
   if (disabled) return;
 
-  console.log('render');
-
   uniforms.u_time = time * 0.001;
 
   twgl.setUniforms(programInfo, uniforms);
@@ -295,7 +293,7 @@ function onMouseMove(e) {
 window.addEventListener('mousemove', onMouseMove);
 
 function onWindowResize() {
-  var pixelRatio = getWindowWidth() < 700 ?  window.devicePixelRatio : 1;
+  var pixelRatio = getWindowWidth() < 700 ?  window.devicePixelRatio*0.7 : 1;
   twgl.resizeCanvasToDisplaySize(gl.canvas, pixelRatio);
   gl.viewport(0, 0, gl.canvas.width, gl.canvas.height);
   uniforms.u_resolution = [gl.canvas.width, gl.canvas.height];
