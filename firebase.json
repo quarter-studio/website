@@ -1,6 +1,15 @@
 {
+  "functions": {
+    "source": "server"
+  },
   "hosting": {
-    "public": "public",
+    "public": "server/public",
+    "rewrites": [
+      {
+        "source": "**",
+        "function": "serve"
+      }
+    ],
     "ignore": [
       "firebase.json",
       "**/.*",

@@ -1,5 +1,6 @@
 {
   "projects": {
-    "default": "quarter-website"
+    "production": "quarter-website",
+    "development": "quarter-website-development"
   }
 }
