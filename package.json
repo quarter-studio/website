@@ -1,0 +1,29 @@
+{
+  "name": "vue-parcel",
+  "private": true,
+  "version": "0.0.1",
+  "description": "A simple Vue + Parcel setup for quick prototyping",
+  "scripts": {
+    "dev": "parcel resources/views/pages/index.pug -d public",
+    "build": "parcel build resources/views/pages/index.pug -d public"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "firebase": "^6.2.4",
+    "parcel-plugin-shader-loader": "^1.0.0",
+    "vue": "^2.6.6",
+    "vue-hot-reload-api": "^2.3.2",
+    "vue-router": "^3.0.2",
+    "vuetify": "^1.5.0"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^2.5.2",
+    "babel-core": "^6.26.3",
+    "babel-preset-env": "^1.7.0",
+    "parcel-bundler": "^1.11.0",
+    "postcss-modules": "^1.4.1",
+    "pug": "^2.0.4",
+    "sass": "^1.22.3",
+    "vue-template-compiler": "^2.6.6"
+  }
+}
