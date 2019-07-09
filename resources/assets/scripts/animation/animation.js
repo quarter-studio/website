@@ -74,6 +74,25 @@ var uniforms = {
   u_resolution: [canvas.width, canvas.height],
 };
 
+var dest = 100
+var current = 0
+var elapse = 0
+
+function animate (duration, start = 0) {
+  return function (time) {
+    var elapse = time - start;
+    var progress = Math.min(1, elapse / duration);
+
+    if (progress === 1) {
+      start += duration
+    }
+
+    return progress
+  }
+}
+
+var ease = animate(1000)
+
 function render(time) {
   requestAnimationFrame(render);
 
@@ -88,6 +107,13 @@ function render(time) {
     uniforms.view = m4.inverse(camera);
     uniforms.model = m4.identity();
     
+    if (ease(time) === 1) {
+      console.log('cool')
+    }
+
+
+    // movement = elapse + 
+    // time += 1000000000000;
     // time %= 31400
     uniforms.u_knob = config.get('knob');
     uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
