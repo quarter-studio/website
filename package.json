@@ -4,7 +4,7 @@
   "version": "0.0.1",
   "description": "A simple Vue + Parcel setup for quick prototyping",
   "scripts": {
-    "clean": "rm -rf public",
+    "clean": "rm -rf public && rm -rf .cache",
     "build": "npm run clean && parcel build resources/views/pages/index.pug -d public",
     "dev": "npm run clean && parcel resources/views/pages/index.pug -d public"
   },
