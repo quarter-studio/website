@@ -10,13 +10,14 @@ uniform vec3 u_lightColor;
 uniform vec2 u_resolution;
 uniform sampler2D u_noise;
 uniform float u_depth;
+uniform float u_noise_scale;
 uniform vec2 u_mouse;
 varying vec3 v_normal;
 varying vec3 v_fragPos;
 varying vec2 v_texCoord;
 
 float whiteNoise(in vec2 p){
-  vec2 tv = p * u_resolution / 256.;
+  vec2 tv = p * u_resolution / (256. * u_noise_scale);
   return texture2D(u_noise, tv).r;
 }
 

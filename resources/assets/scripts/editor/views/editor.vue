@@ -19,7 +19,7 @@
         name: null,
         configs: {},
         visible: env.get('visible'),
-        selection: null,
+        selection: env.get('selection'),
       }
     },
     
@@ -33,6 +33,16 @@
       }
     },
 
+    watch: {
+      visible (value) {
+        env.set('visible', value)
+      },
+
+      selection (value) {
+        env.set('selection', value)
+      }
+    },
+
     created () {
       this.model = database.ref('animation')
       this.model.on('child_added', this.add)
@@ -42,7 +52,6 @@
     methods: {
       toggle () {
         this.visible = !this.visible
-        env.set('visible', this.visible)
       },
 
       add (snap) {

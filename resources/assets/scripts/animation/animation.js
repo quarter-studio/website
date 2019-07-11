@@ -110,12 +110,12 @@ function renderCanvas(time) {
   uniforms.view = m4.inverse(camera);
   uniforms.model = m4.identity();
   
-
   uniforms.u_knob = config.get('knob');
-  uniforms.u_time = 0; //Math.sin(time / 30000); // use to slow time up or down
+  uniforms.u_noise_scale = config.get('noise');
+  uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
   uniforms.u_depth = config.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
   uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
-  uniforms.u_lightColor = [1, 1, 1]; // color of spotlight in RGB
+  uniforms.u_lightColor = [0, 0, config.get('knob')]; // color of spotlight in RGB
   uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
   uniforms.u_ambientIntensity = config.get('ambience'); // ambient light intensity [0...1]
   uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]

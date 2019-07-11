@@ -7,7 +7,8 @@ var defaultConfig = {
   depth: { name: 'Height', min: 1, max: 400, value: 0.175 },
   seed: { name: 'Seed', min: 0, max: 1, value: 0.175 },
   zoom: { name: 'Zoom', min: 0, max: 120, value: 0.25 },
-  fov: { name: 'Field of view', min: 50, max: 250, value: 0.4 }
+  fov: { name: 'Field of view', min: 50, max: 250, value: 0.4 },
+  noise: { name: 'Noise', min: 0, max: 4, value: 0.25 },
 }
 
 var config = defaultConfig
