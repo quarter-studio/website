@@ -91,46 +91,41 @@ function animate (duration, start = 0) {
   }
 }
 
-var ease = animate(1000)
-
 function render(time) {
   requestAnimationFrame(render);
 
   if (canvas.getBoundingClientRect().bottom) {
-    var fieldOfView = config.get('zoom') * Math.PI / config.get('fov');
-    uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
-
-    var target = [config.get('knob'), 0, 0];
-    var eye = [config.get('knob'), 500, -1];
-    var up = [0, 1, 0];
-    var camera = m4.lookAt(eye, target, up);
-    uniforms.view = m4.inverse(camera);
-    uniforms.model = m4.identity();
-    
-    if (ease(time) === 1) {
-      console.log('cool')
-    }
-
-
-    // movement = elapse + 
-    // time += 1000000000000;
-    // time %= 31400
-    uniforms.u_knob = config.get('knob');
-    uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
-    uniforms.u_depth = config.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
-    uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
-    uniforms.u_lightColor = [1, 1, 1]; // color of spotlight in RGB
-    uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
-    uniforms.u_ambientIntensity = config.get('ambience'); // ambient light intensity [0...1]
-    uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
-    uniforms.u_scale = config.get('scale'); // scale of the simplex noise
-    uniforms.u_seed = config.get('seed');
-    uniforms.u_direction[0] += uniforms.u_mouse[0]*0.001;
-    uniforms.u_direction[1] += uniforms.u_mouse[1]*0.001;
-
-    twgl.setUniforms(shader, uniforms);
-    twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
+    renderCanvas(time)
   }
+}
+
+function renderCanvas(time) {
+  var fieldOfView = config.get('zoom') * Math.PI / config.get('fov');
+  uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
+
+  var target = [config.get('knob'), 0, 0];
+  var eye = [config.get('knob'), 500, -1];
+  var up = [0, 1, 0];
+  var camera = m4.lookAt(eye, target, up);
+  uniforms.view = m4.inverse(camera);
+  uniforms.model = m4.identity();
+  
+
+  uniforms.u_knob = config.get('knob');
+  uniforms.u_time = 0; //Math.sin(time / 30000); // use to slow time up or down
+  uniforms.u_depth = config.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
+  uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
+  uniforms.u_lightColor = [1, 1, 1]; // color of spotlight in RGB
+  uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
+  uniforms.u_ambientIntensity = config.get('ambience'); // ambient light intensity [0...1]
+  uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
+  uniforms.u_scale = config.get('scale'); // scale of the simplex noise
+  uniforms.u_seed = config.get('seed');
+  uniforms.u_direction[0] += uniforms.u_mouse[0]*0.001;
+  uniforms.u_direction[1] += uniforms.u_mouse[1]*0.001;
+
+  twgl.setUniforms(shader, uniforms);
+  twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
 window.addEventListener('mousemove', function (event) {
@@ -140,4 +135,3 @@ window.addEventListener('mousemove', function (event) {
   // uniforms.u_direction = [x, y];
   uniforms.u_mouse = [x, y];
 });
-

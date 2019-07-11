@@ -4,6 +4,7 @@
   import config from '../config.js'
   import slider from './slider.vue'
   import merge from 'lodash/merge'
+  import env from '../env.js'
   import Vue from 'vue'
 
   export default {
@@ -17,7 +18,7 @@
       return {
         name: null,
         configs: {},
-        visible: true,
+        visible: env.get('visible'),
         selection: null,
       }
     },
@@ -41,6 +42,7 @@
     methods: {
       toggle () {
         this.visible = !this.visible
+        env.set('visible', this.visible)
       },
 
       add (snap) {

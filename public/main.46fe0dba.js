@@ -2973,51 +2973,45 @@ function animate(duration) {
   };
 }
 
-var ease = animate(1000);
-
 function render(time) {
   requestAnimationFrame(render);
 
   if (canvas.getBoundingClientRect().bottom) {
-    var fieldOfView = _config.default.get('zoom') * Math.PI / _config.default.get('fov');
-
-    uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
-    var target = [_config.default.get('knob'), 0, 0];
-    var eye = [_config.default.get('knob'), 500, -1];
-    var up = [0, 1, 0];
-    var camera = m4.lookAt(eye, target, up);
-    uniforms.view = m4.inverse(camera);
-    uniforms.model = m4.identity();
-
-    if (ease(time) === 1) {
-      console.log('cool');
-    } // movement = elapse + 
-    // time += 1000000000000;
-    // time %= 31400
-
-
-    uniforms.u_knob = _config.default.get('knob');
-    uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
-
-    uniforms.u_depth = _config.default.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
-
-    uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
-
-    uniforms.u_lightColor = [1, 1, 1]; // color of spotlight in RGB
-
-    uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
-    uniforms.u_ambientIntensity = _config.default.get('ambience'); // ambient light intensity [0...1]
-
-    uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
-
-    uniforms.u_scale = _config.default.get('scale'); // scale of the simplex noise
-
-    uniforms.u_seed = _config.default.get('seed');
-    uniforms.u_direction[0] += uniforms.u_mouse[0] * 0.001;
-    uniforms.u_direction[1] += uniforms.u_mouse[1] * 0.001;
-    twgl.setUniforms(shader, uniforms);
-    twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
+    renderCanvas(time);
   }
+}
+
+function renderCanvas(time) {
+  var fieldOfView = _config.default.get('zoom') * Math.PI / _config.default.get('fov');
+
+  uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
+  var target = [_config.default.get('knob'), 0, 0];
+  var eye = [_config.default.get('knob'), 500, -1];
+  var up = [0, 1, 0];
+  var camera = m4.lookAt(eye, target, up);
+  uniforms.view = m4.inverse(camera);
+  uniforms.model = m4.identity();
+  uniforms.u_knob = _config.default.get('knob');
+  uniforms.u_time = 0; //Math.sin(time / 30000); // use to slow time up or down
+
+  uniforms.u_depth = _config.default.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
+
+  uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
+
+  uniforms.u_lightColor = [1, 1, 1]; // color of spotlight in RGB
+
+  uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
+  uniforms.u_ambientIntensity = _config.default.get('ambience'); // ambient light intensity [0...1]
+
+  uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
+
+  uniforms.u_scale = _config.default.get('scale'); // scale of the simplex noise
+
+  uniforms.u_seed = _config.default.get('seed');
+  uniforms.u_direction[0] += uniforms.u_mouse[0] * 0.001;
+  uniforms.u_direction[1] += uniforms.u_mouse[1] * 0.001;
+  twgl.setUniforms(shader, uniforms);
+  twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
 window.addEventListener('mousemove', function (event) {
@@ -30618,7 +30612,45 @@ var merge = createAssigner(function(object, source, srcIndex) {
 
 module.exports = merge;
 
-},{"./_baseMerge":"../../../node_modules/lodash/_baseMerge.js","./_createAssigner":"../../../node_modules/lodash/_createAssigner.js"}],"../../assets/scripts/editor/views/editor.vue":[function(require,module,exports) {
+},{"./_baseMerge":"../../../node_modules/lodash/_baseMerge.js","./_createAssigner":"../../../node_modules/lodash/_createAssigner.js"}],"../../assets/scripts/editor/env.js":[function(require,module,exports) {
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+exports.default = void 0;
+
+var env = function env() {
+  var namespace = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '';
+  namespace = namespace + ':';
+  return {
+    at: function at(key) {
+      return env(namespace + key);
+    },
+    clear: function clear() {
+      return localStorage.clear();
+    },
+    delete: function _delete(key) {
+      return localStorage.removeItem(namespace + key);
+    },
+    get: function get(key, fallback) {
+      var value = localStorage.getItem(namespace + key);
+      return value === null ? fallback : JSON.parse(value);
+    },
+    has: function has(key) {
+      return localStorage.getItem(namespace + key) !== null;
+    },
+    set: function set(key, value) {
+      localStorage.setItem(namespace + key, JSON.stringify(value));
+      return value;
+    }
+  };
+};
+
+var _default = env('v1');
+
+exports.default = _default;
+},{}],"../../assets/scripts/editor/views/editor.vue":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30636,6 +30668,8 @@ var _slider = _interopRequireDefault(require("./slider.vue"));
 
 var _merge = _interopRequireDefault(require("lodash/merge"));
 
+var _env = _interopRequireDefault(require("../env.js"));
+
 var _vue = _interopRequireDefault(require("vue"));
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
@@ -30649,7 +30683,7 @@ var _default = {
     return {
       name: null,
       configs: {},
-      visible: true,
+      visible: _env.default.get('visible'),
       selection: null
     };
   },
@@ -30666,6 +30700,8 @@ var _default = {
   methods: {
     toggle: function toggle() {
       this.visible = !this.visible;
+
+      _env.default.set('visible', this.visible);
     },
     add: function add(snap) {
       _vue.default.set(this.configs, snap.key, snap.val());
@@ -30937,7 +30973,7 @@ this["$style"] = {"module":"_module_5f239","button":"_button_5f239"};
       
       }
     })();
-},{"lodash/defaultsDeep":"../../../node_modules/lodash/defaultsDeep.js","../firebase/database.js":"../../assets/scripts/editor/firebase/database.js","../config.js":"../../assets/scripts/editor/config.js","./slider.vue":"../../assets/scripts/editor/views/slider.vue","lodash/merge":"../../../node_modules/lodash/merge.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js","_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js"}],"../../assets/scripts/editor/editor.js":[function(require,module,exports) {
+},{"lodash/defaultsDeep":"../../../node_modules/lodash/defaultsDeep.js","../firebase/database.js":"../../assets/scripts/editor/firebase/database.js","../config.js":"../../assets/scripts/editor/config.js","./slider.vue":"../../assets/scripts/editor/views/slider.vue","lodash/merge":"../../../node_modules/lodash/merge.js","../env.js":"../../assets/scripts/editor/env.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js","_css_loader":"../../../node_modules/parcel-bundler/src/builtins/css-loader.js","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js"}],"../../assets/scripts/editor/editor.js":[function(require,module,exports) {
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -30993,7 +31029,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "55301" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "65439" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
