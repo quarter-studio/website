@@ -129,7 +129,13 @@ function animateWind (elapseTime, deltaTime) {
   uniforms.u_offset[1] += windPower * Math.sin(windDirection) * .000001;
 }
 
-window.addEventListener('mousemove', function (event) {
+if (isMobileDevice) {
+
+} else {
+  window.addEventListener('mousemove', mouseMove);
+}
+
+function mouseMove (event) {
   var innerInfluence = config.get('windInfluenceInner')
   var outerInfluence = config.get('windInfluenceOuter')
   var radius = Math.min(window.innerWidth, window.innerHeight) / 2
@@ -143,7 +149,7 @@ window.addEventListener('mousemove', function (event) {
   // var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;
   // // uniforms.u_direction = [x, y];
   // uniforms.u_mouse = [x, y];
-});
+}
 
 if (!Math.hypot) {
   Math.hypot = function() {

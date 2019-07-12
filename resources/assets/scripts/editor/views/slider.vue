@@ -11,6 +11,10 @@
     },
 
     computed: {
+      isMultiline () {
+        return this.config.name.indexOf('<br') !== -1
+      },
+
       value: {
         get () {
           return Math.round(this.config.value * this.precision)
@@ -54,7 +58,7 @@
 <template>
   <tr :class="$style.module">
     <td>
-      <label :class="$style.name" v-html="config.name" />
+      <label :class="[$style.name, isMultiline && $style.small]" v-html="config.name" />
     </td>
 
     <td>
@@ -76,6 +80,12 @@
     padding-right: 1rem;
   }
 
+  .small {
+    font-size: 1rem;
+    line-height: 1.2rem;
+    display: block;
+  }
+
   .text::-webkit-inner-spin-button,
   .text::-webkit-inner-spin-button {
     -webkit-appearance: none; 
@@ -94,7 +104,7 @@
 
   .slider {
     margin: auto 10px;
-    max-width: 80px;
+    max-width: 120px;
     vertical-align: sub;
   }
 </style>

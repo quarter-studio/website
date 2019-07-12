@@ -115,16 +115,26 @@
 
 <template>
   <div :class="$style.module">
-    <div >
+    <div :class="$style.bar">
       <span v-if="visible" :class="$style.button" @click="toggle">hide</span>
       <span v-else :class="$style.button" @click="toggle">edit</span>
+      <template v-if="visible">
+        <span :class="$style.spacer">|</span>
+        <span :class="$style.button" @click="create">new</span>
+        <template v-if="config">
+          <span :class="$style.button" @click="copy">copy</span>
+          <span :class="$style.button" @click="rename">rename</span>
+          <span :class="$style.button" @click="save">save</span>
+          <span :class="$style.button" @click="destroy">delete</span>
+        </template>
+      </template>
     </div>
 
     <table v-if="visible">
       <tr>
-        <td>Config</td>
+        <td>Settings</td>
         <td>
-          <select v-if="name === null" v-model="selection">
+          <select v-if="name === null" v-model="selection" :class="$style.fill">
             <option disabled value="">Please select one</option>
             <option
               v-for="(config, key) in configs"
@@ -134,20 +144,16 @@
             />
           </select>
           
-          <input v-else type="text" v-model="name" @keydown.enter="rename" @blur="blur">
+          <input v-else type="text" v-model="name" :class="$style.fill" @keydown.enter="rename" @blur="blur">
         </td>
       </tr>
 
       <tr>
         <td></td>
-        <td>
-          <span :class="$style.button" @click="create">new</span>
-          <template v-if="config">
-            <span :class="$style.button" @click="copy">copy</span>
-            <span :class="$style.button" @click="rename">rename</span>
-            <span :class="$style.button" @click="save">save</span>
-            <span :class="$style.button" @click="destroy">delete</span>
-          </template>
+        <td :class="$style.labels">
+          <div>min</div>
+          <div>value</div>
+          <div>max</div>
         </td>
       </tr>
 
@@ -164,14 +170,33 @@
     left: 0;
     z-index: 10;
     padding: 10px;
-    position: absolute;
-    background: rgba(50,50,50,0.7);
+    position: fixed;
+    background: rgba(10,10,10,0.9);
     font-size: 12px;
+    font-weight: 100;
+  }
+
+  .bar {
+    margin-bottom: 1rem;
+  }
+
+  .spacer {
+    margin: 0 0.5rem;
   }
 
   .button {
     cursor: pointer;
     padding: 4px;
+  }
+
+  .fill {
+    width: 100%;
+  }
+
+  .labels {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.5rem 1.1rem;
   }
 </style>
 
