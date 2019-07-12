@@ -1,9 +1,12 @@
 <script>
   import defaultsDeep from 'lodash/defaultsDeep'
   import database from '../firebase/database.js'
+  import includes from 'lodash/includes'
   import config from '../../config.js'
   import slider from './slider.vue'
   import merge from 'lodash/merge'
+  import pick from 'lodash/pick'
+  import map from 'lodash/mapValues'
   import env from '../env.js'
   import Vue from 'vue'
 
@@ -47,6 +50,7 @@
       this.model = database.ref('animation')
       this.model.on('child_added', this.add)
       this.model.on('child_removed', this.remove)
+      window.addEventListener('keydown', this.keydown)
     },
 
     methods: {
@@ -90,7 +94,13 @@
       },
 
       save () {
-        this.model.child(this.selection).child('config').set(this.config)
+        this.model.child(this.selection).child('config').set(
+          map(this.config, this.map)
+        )
+      },
+
+      map (value) {
+        return pick(value, ['min', 'max', 'value'])
       },
 
       rename () {
@@ -108,6 +118,14 @@
 
       blur () {
         this.name = null
+      },
+
+      keydown (event) {
+        if (event.metaKey && event.keyCode === 83) {
+          this.save()
+          event.preventDefault()
+          return false
+        }
       }
     }
   }
@@ -116,8 +134,8 @@
 <template>
   <div :class="$style.module">
     <div :class="$style.bar">
-      <span v-if="visible" :class="$style.button" @click="toggle">hide</span>
-      <span v-else :class="$style.button" @click="toggle">edit</span>
+      <span v-if="visible" :class="$style.button" @click="toggle">close</span>
+      <span v-else :class="$style.button" @click="toggle">open</span>
       <template v-if="visible">
         <span :class="$style.spacer">|</span>
         <span :class="$style.button" @click="create">new</span>
