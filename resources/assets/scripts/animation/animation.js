@@ -54,6 +54,13 @@ var textures = twgl.createTextures(webgl, {
   noise: { src: img, mag: webgl.LINEAR }
 });
 
+var target = [0, 0, 0];
+var eye = [0, 500, -1];
+var up = [0, 1, 0];
+var camera = m4.lookAt(eye, target, up);
+
+var elapseTime = 0
+
 twgl.resizeCanvasToDisplaySize(canvas, pixelRatio);
 twgl.setBuffersAndAttributes(webgl, shader, buffers);
 webgl.useProgram(shader.program);
@@ -61,10 +68,6 @@ webgl.clearColor(0, 0, 0, 1);
 webgl.frontFace(webgl.CW);
 webgl.viewport(0, 0, canvas.width, canvas.height);
 
-var target = [0, 0, 0];
-var eye = [0, 500, -1];
-var up = [0, 1, 0];
-var camera = m4.lookAt(eye, target, up);
 var uniforms = {
   view: m4.inverse(camera),
   model: m4.identity(),
@@ -75,21 +78,24 @@ var uniforms = {
 };
 
 function render(time) {
-  requestAnimationFrame(render);
+  var deltaTime = (time - elapseTime);
+  elapseTime = time;
 
   if (canvas.getBoundingClientRect().bottom) {
-    animateWind(time)
-    renderCanvas(time)
+    animateWind(elapseTime, deltaTime);
+    renderCanvas(elapseTime, deltaTime);
   }
+
+  requestAnimationFrame(render);
 }
 
-function renderCanvas (time) {
+function renderCanvas () {
   var fieldOfView = config.get('zoom') * Math.PI / config.get('fov');
   uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
 
   uniforms.u_knob = config.get('knob');
   uniforms.u_noise_scale = config.get('noise');
-  uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
+  // uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
   uniforms.u_depth = config.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
   uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
   uniforms.u_lightColor = [0, 0, config.get('knob')]; // color of spotlight in RGB
@@ -103,53 +109,33 @@ function renderCanvas (time) {
   twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
-var elapse = 0;
-var radius = 0;
-var radiusEase = 0;
-var theta = 0;
-var thetaEase = 0;
-function animateWind (time) {
-  var delta = (time - elapse) / 1000;
+var windRadiusGoal = 0
+var windThetaGoal = 0
+var windRadius = 0
+var windTheta = 0
+function animateWind (elapseTime, deltaTime) {
+  var theta = windThetaGoal - windTheta;
 
-  elapse = time;
-
-  var angle = theta - thetaEase;
-
-  if (angle > Math.PI) {
-    thetaEase += 2 * Math.PI;
-  } else if (angle < -Math.PI) {
-    thetaEase -= 2 * Math.PI;
+  if (theta > Math.PI) {
+    windTheta += 2 * Math.PI;
+  } else if (theta < -Math.PI) {
+    windTheta -= 2 * Math.PI;
   }
 
-  thetaEase += angle * delta;
+  windTheta += theta * deltaTime / 1000;
+  windRadius += (windRadiusGoal - windRadius) * config.get('windSpeedEasing');
 
-  radiusEase += ((radius - radiusEase) - Math.abs(angle) * 150) * delta;
-  radiusEase = Math.max(100, Math.min(400, radiusEase));
-
-  var bounds = {
-    width: canvas.width,
-    height: canvas.height,
-  }
-
-  var center = {
-    x: bounds.width / 2,
-    y: bounds.height / 2
-  }
+  console.log(config.get('windSpeedEasing'))
   
-  var power = {
-    x: radiusEase * Math.cos(thetaEase),
-    y: radiusEase * Math.sin(thetaEase),
-  }
-
-  uniforms.u_offset[0] += power.x * delta * .00001;
-  uniforms.u_offset[1] += power.y * delta * .00001;
+  uniforms.u_offset[0] += windRadius * Math.cos(windTheta) * deltaTime * .000001;
+  uniforms.u_offset[1] += windRadius * Math.sin(windTheta) * deltaTime * .000001;
 }
 
 window.addEventListener('mousemove', function (event) {
   var x = event.clientX - window.innerWidth / 2;
   var y = event.clientY - window.innerHeight / 2;
-  radius = Math.hypot(x, y);
-  theta = Math.atan2(y, x);
+  windRadiusGoal = Math.max(100, Math.min(400, Math.hypot(x, y)));
+  windThetaGoal = Math.atan2(y, x);
   // var bounds = canvas.getBoundingClientRect();
   // var x = (event.clientX - bounds.left) * canvas.width / canvas.clientWidth / canvas.width * 2 - 1;
   // var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;
