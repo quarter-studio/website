@@ -18,8 +18,8 @@
       return {
         name: null,
         configs: {},
-        visible: env.get('visible'),
-        selection: env.get('selection'),
+        visible: env.get('visible', true),
+        selection: env.get('selection', null),
       }
     },
     

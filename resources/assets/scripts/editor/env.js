@@ -30,4 +30,4 @@ var env = (namespace = '') => {
   }
 }
 
-export default env('v1')
+export default env('v1.1.1')
