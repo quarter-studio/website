@@ -9,7 +9,14 @@ uniform vec3 u_ambientLightColor;
 uniform vec3 u_lightColor;
 uniform vec2 u_resolution;
 uniform sampler2D u_noise;
+uniform float u_gradient_size;
+uniform float u_test_a;
+uniform float u_test_b;
 uniform float u_depth;
+uniform float u_gradient;
+uniform float u_line_thickness;
+uniform float u_gradient_ramp;
+uniform float u_gradient_dither;
 uniform float u_noise_scale;
 uniform vec2 u_mouse;
 varying vec3 v_normal;
@@ -53,23 +60,23 @@ void main(){
   float v = 0.0;
 
   float d = getDepth(yPos, 0.0, float(steps));
-  float thickness = 0.08; //for making simple gradients
+  float thickness = u_gradient_size; // 0.08; //for making simple gradients
 
-  for (int i = offset; i<steps; i++){
+  for (int i = offset; i < steps; i++){
     float value = float(i) / float(steps);
 
     if (yPos <= value && yPos > value - thickness){
-      v += mapRange(yPos, value - thickness, value, 0.0, 0.7);
+      v += mapRange(yPos, value - thickness, value, 0.0, u_gradient_dither); // 0.7);
 
     }
 
-    if (yPos <= value && yPos > value - 0.003) {
+    if (yPos <= value && yPos > value - u_line_thickness) {
       v = 1.;
     }
   }
 
-  v *= floor((whiteNoise(uv) * v) + .85);
-  v += floor( (whiteNoise(uv * 3.) + .4) * floor(v + .9) );
+  v *= floor((whiteNoise(uv) * v) + u_gradient); //.85);
+  v += floor( (whiteNoise(uv * 3.) + .4) * floor(v + u_gradient_ramp) ); //.9) );
   v = clamp(v, 0., 1.);
 
   // Add lighting
@@ -100,6 +107,7 @@ void main(){
   //col = clamp(col, 0.0, 1.0);
 
   // Add vertical gradient
+  // col *= u_test + uv.y * u_test * 2.;
   col *= 0.35 + uv.y * 0.65;
 
   vec4 finalColor = vec4(col, 1.0);

@@ -93,12 +93,18 @@ function renderCanvas () {
   var fieldOfView = config.get('zoom') * Math.PI / config.get('fov');
   uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
 
-  uniforms.u_knob = config.get('knob');
+  uniforms.u_test_a = config.get('_testA');
+  uniforms.u_test_b = config.get('_testB');
+  uniforms.u_gradient = config.get('gradient');
+  uniforms.u_gradient_ramp = config.get('gradientRamp');
+  uniforms.u_gradient_dither = config.get('gradientDither');
+  uniforms.u_gradient_size = config.get('gradientSize');
+  uniforms.u_line_thickness = config.get('lineThickness');
   uniforms.u_noise_scale = config.get('noise');
   // uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
   uniforms.u_depth = config.get('depth'); // Math.sin(time/200) * 100; // 70 // wobbly mountains
   uniforms.u_lightPos = [0, 200, 0]; //origin of spotlight
-  uniforms.u_lightColor = [0, 0, config.get('knob')]; // color of spotlight in RGB
+  uniforms.u_lightColor = [0, 0, 0]; // color of spotlight in RGB
   uniforms.u_ambientLightColor = [1, 1, 1], // ambient light color in RGB
   uniforms.u_ambientIntensity = config.get('ambience'); // ambient light intensity [0...1]
   uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
