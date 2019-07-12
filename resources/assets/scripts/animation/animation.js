@@ -11,7 +11,7 @@ var m4 = twgl.m4;
 
 var isMobileDevice = window.orientation !== undefined || navigator.userAgent.indexOf('IEMobile') !== -1;
 var aspectRatio = canvas.clientWidth / canvas.clientHeight;
-var pixelRatio = isMobileDevice ? 1 : window.devicePixelRatio;
+var pixelRatio = window.devicePixelRatio;//isMobileDevice ? window.devicePixelRatio : 1;
 var vertices = 256;
 var stretchX = 2.2;
 var stretchY = 2.6;
@@ -60,6 +60,8 @@ var up = [0, 1, 0];
 var camera = m4.lookAt(eye, target, up);
 
 var elapseTime = 0
+
+console.log(pixelRatio)
 
 twgl.resizeCanvasToDisplaySize(canvas, pixelRatio);
 twgl.setBuffersAndAttributes(webgl, shader, buffers);
