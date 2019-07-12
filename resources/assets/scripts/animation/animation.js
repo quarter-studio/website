@@ -122,7 +122,7 @@ function animateWind (elapseTime, deltaTime) {
     windTheta -= 2 * Math.PI;
   }
 
-  windTheta += theta / 1000;
+  windTheta += theta / 100;
   windRadius += (windRadiusGoal - windRadius) * config.get('windSpeedEasing');
   
   uniforms.u_offset[0] += windRadius * Math.cos(windTheta) * .000001;

@@ -54,7 +54,7 @@
 <template>
   <tr :class="$style.module">
     <td>
-      <label :class="$style.name">{{ config.name }}</label>
+      <label :class="$style.name" v-html="config.name" />
     </td>
 
     <td>
