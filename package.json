@@ -6,6 +6,7 @@
   "scripts": {
     "clean": "rm -rf public && rm -rf .cache",
     "build": "npm run clean && parcel build resources/views/pages/index.pug -d public",
+    "deploy": "npm run build && firebase deploy",
     "dev": "npm run clean && parcel resources/views/pages/index.pug -d public"
   },
   "license": "MIT",

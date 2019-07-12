@@ -80,9 +80,13 @@
     padding-right: 1rem;
   }
 
+  tr, td {
+    font-size: inherit;
+  }
+
   .small {
-    font-size: 1rem;
-    line-height: 1.2rem;
+    font-size: 9px;
+    line-height: 11px;
     display: block;
   }
 
