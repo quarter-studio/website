@@ -112,43 +112,45 @@ function renderCanvas () {
 var windDirection = 0
 var windRadius = 0
 var windTheta = 0
-var windPower = 0
+var windSpeed = 0
+
 function animateWind (elapseTime, deltaTime) {
+  
+  var outer = config.get('windInfluenceOuter');
+  var inner = config.get('windInfluenceInner');
+  var min = config.get('windSpeedMin');
+  var max = config.get('windSpeedMax');
+
   var theta = windTheta - windDirection;
+  var radius = Math.max(0, windRadius - inner);
+  radius = Math.min(1, radius / (outer - inner));
+  radius = min + (max - min) * radius;
+
+  windDirection += theta * config.get('windDirectionEase');
+  windSpeed += (radius - windSpeed) * config.get('windSpeedEase');
 
   if (theta > Math.PI) {
     windDirection += 2 * Math.PI;
   } else if (theta < -Math.PI) {
-    windTheta -= 2 * Math.PI;
+    windDirection -= 2 * Math.PI;
   }
 
-  windDirection += theta / 100;
-  windPower += (windRadius - windPower) * config.get('windSpeedEasing');
-  
-  uniforms.u_offset[0] += windPower * Math.cos(windDirection) * .000001;
-  uniforms.u_offset[1] += windPower * Math.sin(windDirection) * .000001;
+  uniforms.u_offset[0] += windSpeed * Math.cos(windDirection) * .000001;
+  uniforms.u_offset[1] += windSpeed * Math.sin(windDirection) * .000001;
+}
+
+function mouseMove (event) {
+  var radius = Math.hypot(window.innerWidth / 2, window.innerHeight / 2);
+  var x = event.clientX - window.innerWidth / 2;
+  var y = event.clientY - window.innerHeight / 2;
+  windRadius = Math.hypot(x, y) / radius;
+  windTheta = Math.atan2(y, x);
 }
 
 if (isMobileDevice) {
 
 } else {
   window.addEventListener('mousemove', mouseMove);
-}
-
-function mouseMove (event) {
-  var innerInfluence = config.get('windInfluenceInner')
-  var outerInfluence = config.get('windInfluenceOuter')
-  var radius = Math.min(window.innerWidth, window.innerHeight) / 2
-  var x = event.clientX - window.innerWidth / 2;
-  var y = event.clientY - window.innerHeight / 2;
-
-  windRadius = Math.max(radius * innerInfluence, Math.min(radius * outerInfluence, Math.hypot(x, y)));
-  windTheta = Math.atan2(y, x);
-  // var bounds = canvas.getBoundingClientRect();
-  // var x = (event.clientX - bounds.left) * canvas.width / canvas.clientWidth / canvas.width * 2 - 1;
-  // var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;
-  // // uniforms.u_direction = [x, y];
-  // uniforms.u_mouse = [x, y];
 }
 
 if (!Math.hypot) {
