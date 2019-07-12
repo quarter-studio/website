@@ -95,6 +95,7 @@ function renderCanvas () {
 
   uniforms.u_test_a = config.get('_testA');
   uniforms.u_test_b = config.get('_testB');
+  uniforms.u_density = config.get('density');
   uniforms.u_gradient = config.get('gradient');
   uniforms.u_gradient_ramp = config.get('gradientRamp');
   uniforms.u_gradient_dither = config.get('gradientDither');

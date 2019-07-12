@@ -21,6 +21,7 @@ var defaultConfig = {
   gradient: { name: 'Gradient', min: 0, max: 1, value: 0.85 },
   gradientRamp: { name: 'Gradient Ramp', min: 0, max: 1, value: 0.9 },
   lineThickness: { name: 'Line Thickness', min: 0, max: .01, value: 0.3 },
+  density: { name: 'Layers', min: 0, max: 30, value: .1 },
 }
 
 var config = defaultConfig

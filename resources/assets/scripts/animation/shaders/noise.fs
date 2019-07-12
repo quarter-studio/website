@@ -12,6 +12,7 @@ uniform sampler2D u_noise;
 uniform float u_gradient_size;
 uniform float u_test_a;
 uniform float u_test_b;
+uniform float u_density;
 uniform float u_depth;
 uniform float u_gradient;
 uniform float u_line_thickness;
@@ -59,15 +60,16 @@ void main(){
   float s = 0.0;
   float v = 0.0;
 
-  float d = getDepth(yPos, 0.0, float(steps));
+  float d = getDepth(yPos, 0.0, u_density);
   float thickness = u_gradient_size; // 0.08; //for making simple gradients
 
-  for (int i = offset; i < steps; i++){
-    float value = float(i) / float(steps);
+  for (int i = offset; i < 100; i++) {
+    if (float(i) >= u_density) { break; }
+
+    float value = float(i) / u_density;
 
     if (yPos <= value && yPos > value - thickness){
       v += mapRange(yPos, value - thickness, value, 0.0, u_gradient_dither); // 0.7);
-
     }
 
     if (yPos <= value && yPos > value - u_line_thickness) {
@@ -76,7 +78,7 @@ void main(){
   }
 
   v *= floor((whiteNoise(uv) * v) + u_gradient); //.85);
-  v += floor( (whiteNoise(uv * 3.) + .4) * floor(v + u_gradient_ramp) ); //.9) );
+  v += floor((whiteNoise(uv * u_test_a) + u_test_b) * floor(v + u_gradient_ramp) ); //.9) );
   v = clamp(v, 0., 1.);
 
   // Add lighting
