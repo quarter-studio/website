@@ -68,48 +68,25 @@ var camera = m4.lookAt(eye, target, up);
 var uniforms = {
   view: m4.inverse(camera),
   model: m4.identity(),
-  u_direction: [0.0, -1.0],
+  u_offset: [0, 0],
   u_mouse: [0, 0.5],
   u_noise: textures.noise,
   u_resolution: [canvas.width, canvas.height],
 };
 
-var dest = 100
-var current = 0
-var elapse = 0
-
-function animate (duration, start = 0) {
-  return function (time) {
-    var elapse = time - start;
-    var progress = Math.min(1, elapse / duration);
-
-    if (progress === 1) {
-      start += duration
-    }
-
-    return progress
-  }
-}
-
 function render(time) {
   requestAnimationFrame(render);
 
   if (canvas.getBoundingClientRect().bottom) {
+    animateWind(time)
     renderCanvas(time)
   }
 }
 
-function renderCanvas(time) {
+function renderCanvas (time) {
   var fieldOfView = config.get('zoom') * Math.PI / config.get('fov');
   uniforms.projection = m4.perspective(fieldOfView, aspectRatio, 1, 10000);
 
-  var target = [config.get('knob'), 0, 0];
-  var eye = [config.get('knob'), 500, -1];
-  var up = [0, 1, 0];
-  var camera = m4.lookAt(eye, target, up);
-  uniforms.view = m4.inverse(camera);
-  uniforms.model = m4.identity();
-  
   uniforms.u_knob = config.get('knob');
   uniforms.u_noise_scale = config.get('noise');
   uniforms.u_time = Math.sin(time / 30000); // use to slow time up or down
@@ -121,17 +98,69 @@ function renderCanvas(time) {
   uniforms.u_specularIntensity = 0.5; // specular intensity of spotlight [0...1]
   uniforms.u_scale = config.get('scale'); // scale of the simplex noise
   uniforms.u_seed = config.get('seed');
-  uniforms.u_direction[0] += uniforms.u_mouse[0]*0.001;
-  uniforms.u_direction[1] += uniforms.u_mouse[1]*0.001;
 
   twgl.setUniforms(shader, uniforms);
   twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
+var elapse = 0;
+var radius = 0;
+var radiusEase = 0;
+var theta = 0;
+var thetaEase = 0;
+function animateWind (time) {
+  var delta = (time - elapse) / 1000;
+
+  elapse = time;
+
+  var angle = theta - thetaEase;
+
+  if (angle > Math.PI) {
+    thetaEase += 2 * Math.PI;
+  } else if (angle < -Math.PI) {
+    thetaEase -= 2 * Math.PI;
+  }
+
+  thetaEase += angle * delta;
+
+  radiusEase += ((radius - radiusEase) - Math.abs(angle) * 150) * delta;
+  radiusEase = Math.max(100, Math.min(400, radiusEase));
+
+  var bounds = {
+    width: canvas.width,
+    height: canvas.height,
+  }
+
+  var center = {
+    x: bounds.width / 2,
+    y: bounds.height / 2
+  }
+  
+  var power = {
+    x: radiusEase * Math.cos(thetaEase),
+    y: radiusEase * Math.sin(thetaEase),
+  }
+
+  uniforms.u_offset[0] += power.x * delta * .00001;
+  uniforms.u_offset[1] += power.y * delta * .00001;
+}
+
 window.addEventListener('mousemove', function (event) {
-  var bounds = canvas.getBoundingClientRect();
-  var x = (event.clientX - bounds.left) * canvas.width / canvas.clientWidth / canvas.width * 2 - 1;
-  var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;
-  // uniforms.u_direction = [x, y];
-  uniforms.u_mouse = [x, y];
+  var x = event.clientX - window.innerWidth / 2;
+  var y = event.clientY - window.innerHeight / 2;
+  radius = Math.hypot(x, y);
+  theta = Math.atan2(y, x);
+  // var bounds = canvas.getBoundingClientRect();
+  // var x = (event.clientX - bounds.left) * canvas.width / canvas.clientWidth / canvas.width * 2 - 1;
+  // var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;
+  // // uniforms.u_direction = [x, y];
+  // uniforms.u_mouse = [x, y];
 });
+
+if (!Math.hypot) {
+  Math.hypot = function() {
+    var y = 0, i = arguments.length;
+    while (i--) y += arguments[i] * arguments[i];
+    return Math.sqrt(y);
+  };
+}

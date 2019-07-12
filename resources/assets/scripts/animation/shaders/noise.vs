@@ -12,6 +12,7 @@ uniform mediump mat4 model;
 uniform mediump mat4 view;
 uniform mediump vec2 u_resolution;
 uniform mediump vec2 u_direction;
+uniform mediump vec2 u_offset;
 varying mediump vec2 v_texCoord;
 varying mediump vec3 v_fragPos;
 varying mediump vec3 v_normal;
@@ -76,13 +77,14 @@ void main () {
 
   vec2 scale = vec2(5. * aspect * 1. / u_scale, 5. * 1. / u_scale);
 
-  vec2 direction = u_direction * u_time;
+  vec2 offset = u_offset;
+  // vec2 direction = u_direction * u_time;
   // vec2 direction = vec2(u_direction.x * u_time, u_direction.y * u_time);
 
   vec4 movement = vec4(position, 1.);
   
-  float noise1 = snoise( u_seed + vec2(uv.x * scale.x + direction.x, uv.y * scale.y + direction.y ));
-  float noise2 = snoise( u_seed + vec2(uv.x * scale.x + direction.x, uv.y * scale.y + direction.y / 3. ) * 3.); //wobbles
+  float noise1 = snoise( u_seed + vec2(uv.x * scale.x + offset.x, uv.y * scale.y + offset.y ));
+  float noise2 = snoise( u_seed + vec2(uv.x * scale.x + offset.x, uv.y * scale.y + offset.y / 3. ) * 3.); //wobbles
 
   movement.y = mix(noise1, noise2, 0.2) * u_depth;
 
