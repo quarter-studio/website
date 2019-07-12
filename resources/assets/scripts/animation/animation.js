@@ -122,13 +122,11 @@ function animateWind (elapseTime, deltaTime) {
     windTheta -= 2 * Math.PI;
   }
 
-  windTheta += theta * deltaTime / 1000;
+  windTheta += theta / 1000;
   windRadius += (windRadiusGoal - windRadius) * config.get('windSpeedEasing');
-
-  console.log(config.get('windSpeedEasing'))
   
-  uniforms.u_offset[0] += windRadius * Math.cos(windTheta) * deltaTime * .000001;
-  uniforms.u_offset[1] += windRadius * Math.sin(windTheta) * deltaTime * .000001;
+  uniforms.u_offset[0] += windRadius * Math.cos(windTheta) * .000001;
+  uniforms.u_offset[1] += windRadius * Math.sin(windTheta) * .000001;
 }
 
 window.addEventListener('mousemove', function (event) {
