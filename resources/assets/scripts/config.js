@@ -10,6 +10,8 @@ var defaultConfig = {
   fov: { name: 'Field of view', min: 50, max: 250, value: 0.4 },
   noise: { name: 'Noise', min: 0, max: 4, value: 0.25 },
   windSpeedEasing: { name: 'Wind Speed<br/>Change Easing', min: 0, max: 1, value: 0.1 },
+  windInfluenceInner: { name: 'Wind Influence<br/>Inner Radius', min: 0, max: 1, value: 0.1 },
+  windInfluenceOuter: { name: 'Wind Influence<br/>Outer Radius', min: 0, max: 1, value: 0.5 },
 }
 
 var config = defaultConfig

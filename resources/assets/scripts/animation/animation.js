@@ -1,4 +1,4 @@
-import config from '../editor/config.js';
+import config from '../config.js';
 import img from '../../images/noise.png';
 import fs from './shaders/noise.fs';
 import vs from './shaders/noise.vs';
@@ -109,31 +109,35 @@ function renderCanvas () {
   twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
-var windRadiusGoal = 0
-var windThetaGoal = 0
+var windDirection = 0
 var windRadius = 0
 var windTheta = 0
+var windPower = 0
 function animateWind (elapseTime, deltaTime) {
-  var theta = windThetaGoal - windTheta;
+  var theta = windTheta - windDirection;
 
   if (theta > Math.PI) {
-    windTheta += 2 * Math.PI;
+    windDirection += 2 * Math.PI;
   } else if (theta < -Math.PI) {
     windTheta -= 2 * Math.PI;
   }
 
-  windTheta += theta / 100;
-  windRadius += (windRadiusGoal - windRadius) * config.get('windSpeedEasing');
+  windDirection += theta / 100;
+  windPower += (windRadius - windPower) * config.get('windSpeedEasing');
   
-  uniforms.u_offset[0] += windRadius * Math.cos(windTheta) * .000001;
-  uniforms.u_offset[1] += windRadius * Math.sin(windTheta) * .000001;
+  uniforms.u_offset[0] += windPower * Math.cos(windDirection) * .000001;
+  uniforms.u_offset[1] += windPower * Math.sin(windDirection) * .000001;
 }
 
 window.addEventListener('mousemove', function (event) {
+  var innerInfluence = config.get('windInfluenceInner')
+  var outerInfluence = config.get('windInfluenceOuter')
+  var radius = Math.min(window.innerWidth, window.innerHeight) / 2
   var x = event.clientX - window.innerWidth / 2;
   var y = event.clientY - window.innerHeight / 2;
-  windRadiusGoal = Math.max(100, Math.min(400, Math.hypot(x, y)));
-  windThetaGoal = Math.atan2(y, x);
+
+  windRadius = Math.max(radius * innerInfluence, Math.min(radius * outerInfluence, Math.hypot(x, y)));
+  windTheta = Math.atan2(y, x);
   // var bounds = canvas.getBoundingClientRect();
   // var x = (event.clientX - bounds.left) * canvas.width / canvas.clientWidth / canvas.width * 2 - 1;
   // var y = (event.clientY - bounds.top) * canvas.height / canvas.clientHeight / canvas.height * 2 - 1;

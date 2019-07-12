@@ -1,7 +1,7 @@
 <script>
   import defaultsDeep from 'lodash/defaultsDeep'
   import database from '../firebase/database.js'
-  import config from '../config.js'
+  import config from '../../config.js'
   import slider from './slider.vue'
   import merge from 'lodash/merge'
   import env from '../env.js'
