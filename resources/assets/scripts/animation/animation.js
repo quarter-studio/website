@@ -118,10 +118,10 @@ function renderCanvas () {
   twgl.drawBufferInfo(webgl, webgl.TRIANGLE_STRIP, buffers);
 }
 
-var windDirection = 0
-var windRadius = 0
-var windTheta = 0
-var windSpeed = 0
+var windDirection = 0;
+var windRadius = 0.75;
+var windTheta = 2;
+var windSpeed = 0;
 
 function animateWind (elapseTime, deltaTime) {
   
@@ -156,9 +156,7 @@ function mouseMove (event) {
   windTheta = Math.atan2(y, x);
 }
 
-if (isMobileDevice) {
-
-} else {
+if (!isMobileDevice) {
   window.addEventListener('mousemove', mouseMove);
 }
 
