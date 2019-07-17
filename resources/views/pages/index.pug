@@ -1,0 +1,278 @@
+extends ../layouts/master
+
+append meta
+  +description('A product studio building software, hardware, brands and teams for new ventures and innovation.')
+  +og('title', 'Quarter')
+  +og('type', 'website')
+  +og('locale', 'en_US')
+  +og('description', 'A product studio building software, hardware, brands and teams for new ventures and innovation.')
+  +og('url', 'https://quarter.studio')
+  +og('image', 'https://cdn.quarter.studio/images/website/quarter-og.png')
+
+append links
+  +canonical('https://quarter.studio')
+  +favicon('../../assets/favicon/')
+
+append fonts
+  +font('https://cdn.quarter.studio/fonts/messina-sans-semi.woff2')
+  +font('https://cdn.quarter.studio/fonts/messina-sans-regular.woff2')
+  +font('https://cdn.quarter.studio/fonts/messina-sans-mono-regular.woff2')
+
+block head
+  +style('../../assets/styles/all.scss')
+
+block header
+  .animation
+    canvas#animation.shader
+    .fader
+
+  header.header.container.navigation
+    ul
+      li NY
+      li SF
+      li PDX
+    a.link(href='mailto:contact@quarter.studio' target='blank')
+      | Contact us
+
+block content
+  main.content
+    header#intro.intro
+      h1.title
+        | Quarter
+      p.text
+        span.line
+          | We are a product studio for
+        span.line
+          | new ventures and innovation.
+    section.goals.container.grid
+      header.section.tile.full
+        h2
+          span.eyebrow
+            | Section 1/4
+          span.title
+            | We build software, hardware, brands 
+            br
+            | and teams for partners exploring new 
+            br
+            | territory in design and technology:
+      article.goal.tile
+        h3
+          span.eyebrow
+            | 01
+          span.title
+            | Startups and 
+            br
+            | Product Teams
+        p.text
+          | MVPs, brand, User Experience, Strategy
+      article.goal.tile.wide
+        h3
+          span.eyebrow
+            | 02
+          span.title
+            | Innovation Labs
+        p.text
+          | Invention, Research, 
+          br
+          | Full-stack Prototyping
+      article.goal.tile
+        h3
+          span.eyebrow
+            | 03
+          span.title
+            | Experimental Technology
+        p.text
+          | Generative Design, Interactive Spaces, Data Visualization
+    section.partners.container.grid
+      header.section.tile.full
+        h2
+          span.eyebrow
+            | Section 2/4
+          span.title
+            | We come from Apple, IDEO, Nokia 
+            br
+            | and Nike with backgrounds in 
+            br
+            | design, engineering, and product.
+      article.partner.tile.half
+        h3.title
+          | Justin Baum
+        p.text
+          | Justin worked at Apple as a UX designer and was most 
+          br
+          |             recently VP Product at Elephant NY. He has worked at 
+          br
+          |             early stage startups and agencies in design and 
+          br
+          |             product leadership positions building a handful of 
+          br
+          |             teams along the way.
+        a.link(href='https://www.linkedin.com/in/justinbaum/' alt='Justin Baum LinkedIn' target='blank')
+          | LinkedIn
+      article.partner.tile.half
+        h3.title
+          | Roy Tatum
+        p.text
+          | Roy has worked with and for established brands and 
+          br
+          |             startups including Nike, Apple, Polyera, and IDEO. 
+          br
+          |             His past projects range from wearables, to apps 
+          br
+          |             and websites, to printed matter and brand identities.
+        a.link(href='https://www.linkedin.com/in/roytatum/' alt='Roy Tatum LinkedIn' target='blank')
+          | LinkedIn
+      article.partner.tile.half
+        h3.title
+          | Wilson Lewis
+        p.text
+          | Wilson has spent the majority of his career on large 
+          br
+          |             teams for companies like Goldman Sachs and Target. 
+          br
+          |             He has built everything from consumer products to 
+          br
+          |             enterprise tools and is always refining the collaborative 
+          br
+          |             process between design and engineering.
+        a.link(href='https://www.linkedin.com/in/wilson-lewis/' alt='Wilson Lewis LinkedIn' target='blank')
+          | LinkedIn
+      article.partner.tile.half
+        h3.title
+          | Tobias Toft
+        p.text
+          | Tobias is  Manager of Applied Creative Technology at 
+          br
+          |             Pinterest and was previously Senior Design Director at 
+          br
+          |             IDEO. He holds a masters in mechanical engineering and 
+          br
+          |             interaction design and has been part of CIID&rsquo;s visiting 
+          br
+          |             faculty for nine years.
+        a.link(href='https://www.linkedin.com/in/tobiastoft/' alt='Tobias Toft LinkedIn' target='blank')
+          | LinkedIn
+    section.capabilities.container.grid
+      header.section.tile.third
+        h2
+          span.eyebrow
+            | Section 3/4
+          span.title
+            | Studio 
+            br
+            |               Services
+      article.tile.third.capability
+        h3.title
+          | Product Strategy
+        p.text
+          | We help leaders articulate vision 
+          br
+          |             and create a plan for the growth 
+          br
+          |             of their businesses.
+        ul
+          li Vision concepting
+          li Value prop design
+          li Customer development
+          li Competitive analysis
+          li Roadmapping
+          li Team design
+      article.tile.third.capability
+        h3.title
+          | Product Design
+        p.text
+          | We design products that range 
+          br
+          |             from complex and systematic 
+          br
+          |             to reductive and expressive.
+        ul
+          li Concepting
+          li UX design
+          li Visual design
+          li Hardware interface
+          li User research
+      article.tile.third.capability
+        h3.title
+          | Brand
+        p.text
+          | We create new brands and 
+          br
+          |             extend existing brands 
+          br
+          |             into digital contexts.
+        ul
+          li Identity
+          li Positioning
+          li Brand landscape
+          li Art direction
+          li Motion design
+          li Design systems
+      article.tile.third.capability
+        h3.title
+          | Prototyping 
+          br
+          |             &amp; Development
+        p.text
+          | We build products in a way that 
+          br
+          |             prioritizes speed of development 
+          br
+          |             and quality of experience.
+        ul
+          li Full-stack prototyping
+          li Pilots, demos, proof of concept
+          li Web / mobile apps
+          li Hardware / software integration
+          li Embedded devices
+          li Systems IoT
+      article.tile.third.capability
+        h3.title
+          | Product Management
+        p.text
+          | We help teams release new products and improve quality and effectiveness.
+        ul
+          li Feature planning
+          li Backlog management
+          li Measurement &amp; analytics
+          li User testing
+          li Goal setting frameworks
+    section.projects.section.container.grid
+      header.tile
+        h2.eyebrow
+          | Section 4/4
+        p.title
+          | In 2015 we designed 
+          a(href='http://www.wove.rip') Wove
+          | , the 
+          br
+          |             first consumer product with a truly 
+          br
+          |             flexible display. In 2019 we formed 
+          br
+          |             Quarter to continue working as a 
+          br
+          |             team on new projects.
+    footer.contact
+      h2.title
+        span.line
+          | For projects email
+        a(href='mailto:contact@quarter.studio' alt='Contact us' target='blank')
+          | contact@quarter.studio
+
+block footer
+  footer.footer.container.navigation
+    ul
+      li
+        a(href='https://twitter.com/QuarterStudio' target='blank')
+          | Twitter
+      li
+        a(href='https://www.instagram.com/quarter.studio' target='blank')
+          | Instagram
+    a.link(href='#intro' alt='Back to top')
+      span.text Back to top
+      span.icon &uarr;
+
+block body
+  script(defer src='https://cdn.quarter.studio/scripts/twgl-full.min.js')
+  script(defer src='../../assets/scripts/main.js')
