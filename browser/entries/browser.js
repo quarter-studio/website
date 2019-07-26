@@ -13,7 +13,11 @@ Vue.config.productionTip = false
 export const render = (h) => h(App)
 export const app = new Vue({ render, router, store })
 
-app.$mount('#app')
+app.$mount(
+  document.body.appendChild(
+    document.createElement('span')
+  )
+)
 
 // Base component
 export default app
