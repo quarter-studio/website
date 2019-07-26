@@ -10,10 +10,10 @@ const compression = require('compression')
 server.use(compression())
 
 const favicon = require('serve-favicon')
-server.use(favicon('public/favicon.ico'))
+server.use(favicon('storage/build/public/favicon.ico'))
 
 const files = express.static.bind(express)
-server.use(files('public'))
+server.use(files('storage/build/public'))
 
 // Routes
 server.get('*', (req, res) => {

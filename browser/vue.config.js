@@ -2,7 +2,7 @@
 const VueSSRServerPlugin = require('vue-server-renderer/server-plugin')
 const VueSSRClientPlugin = require('vue-server-renderer/client-plugin')
 const nodeExternals = require('webpack-node-externals')
-const path = require('path').resolve.bind(__dirname)
+const path = require('path').resolve.bind(null, __dirname)
 
 // Project
 const env = (value) => {
@@ -14,7 +14,7 @@ const target = (value) => {
 }
 
 // Setup
-const outputDir = path('../server/public')
+const outputDir = path('../server/storage/build/public')
 
 const resolve = {
   alias: {
@@ -31,7 +31,9 @@ const browser = {
       node: false,
     
       plugins: [
-        new VueSSRClientPlugin()
+        new VueSSRClientPlugin({
+          filename: '../client-manifest.json'
+        })
       ],
     
       resolve,
@@ -62,7 +64,9 @@ const server = {
       },
       
       plugins: [
-        new VueSSRServerPlugin()
+        new VueSSRServerPlugin({
+          filename: '../server-bundle.json'
+        })
       ],
     
       resolve,

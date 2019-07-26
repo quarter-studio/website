@@ -79,5 +79,4 @@ node_modules/
 *.sw?
 
 # Compiled code
-/dist
-/server/public
+/server/storage
