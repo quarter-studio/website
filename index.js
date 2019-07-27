@@ -1,0 +1,1 @@
+exports.ssr = require('./triggers/ssr.js')

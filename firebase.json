@@ -1,12 +1,13 @@
 {
   "functions": {
-    "source": "server"
+    "source": ""
   },
   "hosting": {
+    "public": "storage/public",
     "rewrites": [
       {
         "source": "**",
-        "function": "server"
+        "function": "ssr"
       }
     ],
     "ignore": [
