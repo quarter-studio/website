@@ -1,1 +1,1 @@
-exports.ssr = require('./triggers/ssr.js')
+exports.ssr = require('./server/ssr.js')

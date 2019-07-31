@@ -4,31 +4,35 @@ const nodeExternals = require('webpack-node-externals')
 
 const resolve = {
   alias: {
-    '@': __dirname
+    '@': require('path').resolve(__dirname, 'client')
   },
 }
 
 const client = {
-  entry: './entries/client.js',
+  entry: './client/main.js',
 
   node: false,
 
   plugins: [
-    new VueSSRClientPlugin()
+    new VueSSRClientPlugin({
+      filename: '../client-manifest.json'
+    })
   ],
 
   resolve,
 }
 
 const server = {
-  entry: './entries/server.js',
+  entry: './client/server.js',
 
   target: 'node',
 
   devtool: false,
 
   plugins: [
-    new VueSSRServerPlugin()
+    new VueSSRServerPlugin({
+      filename: '../server-bundle.json'
+    })
   ],
 
   externals: nodeExternals({
@@ -54,7 +58,22 @@ const config = {
     )
   },
 
-  configureWebpack: () => {
+  chainWebpack: config => {
+    config.module
+      .rule('webgl')
+        .test(/\.(glsl|vs|fs|vert|frag)$/)
+        .exclude
+          .add(/node_modules/)
+          .end()
+        .use('raw')
+          .loader('raw-loader')
+          .end()
+        .use('glslify')
+          .loader('glslify-loader')
+          .end()
+  },
+
+  configureWebpack: (config) => {
     return process.env.VUE_APP_ENV === 'server' ? server : client
   },
 
