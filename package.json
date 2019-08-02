@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "serve": "vue-cli-service serve",
-    "build": "npm run build:client && npm run build:server && rm storage/build/public/index.html",
+    "build": "npm run build:client && npm run build:server",
     "build:client": "vue-cli-service build",
     "build:server": "vue-cli-service build --no-clean --mode=server"
   },
@@ -14,12 +14,16 @@
   "dependencies": {
     "compression": "^1.7.4",
     "core-js": "^2.6.5",
+    "firebase": "^6.3.3",
     "firebase-admin": "^8.2.0",
     "firebase-functions": "^3.1.0",
+    "get-window-size": "^0.1.0",
     "serve-favicon": "^2.5.0",
+    "twgl.js": "^4.11.0",
     "vue": "^2.6.10",
     "vue-router": "^3.0.3",
-    "vuex": "^3.0.1"
+    "vuex": "^3.0.1",
+    "window-size": "^1.1.1"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "^3.9.0",

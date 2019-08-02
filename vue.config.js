@@ -9,7 +9,7 @@ const resolve = {
 }
 
 const client = {
-  entry: './client/main.js',
+  entry: './client/app/Main.js',
 
   node: false,
 
@@ -23,7 +23,7 @@ const client = {
 }
 
 const server = {
-  entry: './client/server.js',
+  entry: './client/app/Server.js',
 
   target: 'node',
 

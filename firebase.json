@@ -3,7 +3,7 @@
     "source": ""
   },
   "hosting": {
-    "public": "storage/public",
+    "public": "storage/build/public",
     "rewrites": [
       {
         "source": "**",
